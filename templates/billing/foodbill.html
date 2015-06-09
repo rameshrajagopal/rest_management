@@ -14,7 +14,12 @@
        </div>
        </div>
        <div>
-       {{ form.as_table }}
+       <form class="bill_form" action="#" method="post">
+            {{form.as_table}}
+        <hr>
+        <strong>Grand Total : </strong> <input id="gtotal" type="text" name="gtotal" />
+        <input class="btn btn-primary" type="submit" name="submit" value="Submit" />
+       </form>
        </div>
         </div>
      </div>

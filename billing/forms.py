@@ -9,9 +9,9 @@ class FoodBillInfoForm(forms.ModelForm):
         model = BillInfo
 
 class FoodBillForm(FoodBillInfoForm):
-    srno  = forms.IntegerField()
+    srno  = forms.IntegerField(initial=1)
     total = forms.FloatField()
-    price = forms.FloatField()
+    price = forms.FloatField(widget=forms.HiddenInput())
 
     class Meta(FoodBillInfoForm.Meta):
         fields = ('srno',) + FoodBillInfoForm.Meta.fields + ('price', 'total',)
