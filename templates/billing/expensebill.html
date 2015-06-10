@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% block title %} expense bill {% endblock title %}
+{% block title %} Expense Bill {% endblock title %}
 {% block content %}
     <div class="page-header">
         <h1> Expense Bill Information </h1>
@@ -17,9 +17,9 @@
        <form class="form-horizontal form-inline" action="{% url 'expensebill' %}" method="post">
             {% csrf_token %}
             {{formset.management_form }}
-            <div class="bill_items">
+            <div class="goods_items">
                 {% for form in formset %}
-                <div class="bill_item" id="bill-{{ forloop.counter0 }}">
+                <div class="goods_item" id="goods-{{ forloop.counter0 }}">
                 <tr><th> <label for="id_form-{{ forloop.counter0 }}-srno">Srno:</label>
                 </th><td>
                 <input class="serialnumber" id="id_form-{{forloop.counter0 }}-srno"
@@ -32,9 +32,9 @@
                 </div>
                 {% endfor %}
             </div>
-            <input type="button" class="btn btn-info add-item" id="add_more" value="Add more">
+            <input type="button" class="btn btn-info add-item" id="goods_add_more" value="Add more">
         <hr>
-        <strong>Grand Total : </strong> <input id="gtotal" type="text" name="gtotal" />
+        <strong>Grand Total : </strong> <input id="goods_gtotal" type="text" name="gtotal" />
         <input class="btn btn-primary" type="submit" name="submit" value="Submit" />
        </form>
        </div>

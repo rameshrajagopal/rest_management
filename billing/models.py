@@ -46,12 +46,7 @@ class BillInfo(models.Model):
     quantity = models.FloatField()
     bill = models.ForeignKey(Bill)
 
-class GoodsExpenseBill(models.Model):
-    when = models.DateTimeField()    
-    total = models.FloatField()
-    merchant = models.CharField(max_length=128, blank=True)
-
-class GoodsExpense(models.Model):
+class Goods(models.Model):
     GOODS_CATEGORIES = (
             ('vegtables', 'vegtables'),
             ('groceries', 'groceries'),
@@ -60,17 +55,13 @@ class GoodsExpense(models.Model):
             ('others', 'others'),
             ('misc', 'misc'),
             ('dairy', 'dairy'),
+            ('water', 'water'),
             )
-    name = models.CharField(max_length=128)
-    slug = models.SlugField(max_length=128)
+    name = models.CharField(max_length=128, unique=True)
+    slug = models.SlugField(unique=True)
     image = models.ImageField(upload_to='profile_images', blank=True)
     category = models.CharField(max_length=32, choices=GOODS_CATEGORIES) 
-    quantity = models.FloatField(default=0)
     price = models.FloatField(default=0)
-    bill = models.ForeignKey(GoodsExpenseBill)
-
-    class Meta:
-        unique_together = ('bill', 'name')
 
     def __str__(self):
         return self.name
@@ -78,5 +69,16 @@ class GoodsExpense(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super(Goods, self).save(*args, **kwargs)
+
+class GoodsBill(models.Model):
+    when = models.DateTimeField()    
+    total = models.FloatField()
+    merchant = models.CharField(max_length=128, blank=True)
+
+class GoodsBillInfo(models.Model):
+    item = models.ForeignKey(Goods)
+    quantity = models.FloatField(default=0)
+    bill = models.ForeignKey(GoodsBill)
+
 
 

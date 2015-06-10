@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from .forms import FoodBillForm, GoodExpenseBillForm
-from .models import FoodItem, Bill, BillInfo, GoodsExpense, GoodsExpenseBill
+from .forms import FoodBillForm, GoodsBillForm
+from .models import FoodItem, Bill, BillInfo, Goods, GoodsBill, GoodsBillInfo
 from django.http import HttpResponse
 from django.forms.formsets import formset_factory
 from django.utils import timezone
@@ -16,8 +16,8 @@ def create_foodbill(total):
     bill.save()
     return bill
 
-def create_expensebill(total):
-    bill = ExpenseBill(when=timezone.now(), total=total)
+def create_goodsbill(total):
+    bill = GoodsBill(when=timezone.now(), total=total)
     bill.save()
     return bill
 
@@ -30,12 +30,11 @@ def store_foodbill_info(bill, item):
     bill_info = BillInfo(item=fitem_obj, quantity=item[1], bill=bill) 
     bill_info.save()
 
-def store_goods_expense(name, category, quantity, price, bill):
-    exp_item = GoodsExpense.objects.get_or_create(name=name, bill=bill)
-    exp_item.category = category
-    exp_item.quantity += quantity
-    exp_item.price += price
-    exp_item.save()
+def store_goodsbill_info(bill, name, quantity):
+    fitem_obj = Goods.objects.get(slug=slugify(name))
+    fitem_obj.save()
+    bill_info = GoodsBillInfo(item=fitem_obj, quantity=quantity, bill=bill) 
+    bill_info.save()
 
 def food_bill(request):
     FoodBillFormSet = formset_factory(FoodBillForm, extra=1)
@@ -65,29 +64,28 @@ def food_bill(request):
     return response
 
 def expense_bill(request):
-    GoodExpensesFormSet = formset_factory(GoodExpenseBillForm, extra=1)
+    GoodsFormSet = formset_factory(GoodsBillForm, extra=1)
     if request.method == 'POST':
-        formset = GoodExpensesFormSet(request.POST, request.FILES)
+        formset = GoodsFormSet(request.POST, request.FILES)
         if formset.is_valid():
             total = 0
             items = []
             for form in formset:
                 if form.cleaned_data['quantity'] != 0:
+                    name = form.cleaned_data['item']
                     quantity = form.cleaned_data['quantity']
                     price = form.cleaned_data['price']
-                    name = form.cleaned_data['name']
-                    category = form.cleaned_data['category']
-                    items.append([name, category, quantity, price])
-                    total += (quantity * price)
-            bill = create_expensebill(total)
+                    items.append([name, quantity, price])
+                    total += price
+            bill = create_goodsbill(total)
             for item in items:
-                store_goods_expense(item[0], item[1], item[2], item[3], bill)
-            formset = GoodExpensesFormSet()
+                store_goodsbill_info(bill, item[0], item[1])
+            formset = GoodsFormSet()
         else:
             print(formset.errors)
-            formset = GoodExpensesFormSet()
+            formset = GoodsFormSet()
     else:
-        formset = GoodExpensesFormSet()
+        formset = GoodsFormSet()
     context = {'formset': formset}
     response = render(request, 'billing/expensebill.html', context)
     return response

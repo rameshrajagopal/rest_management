@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 
 from django import forms
-from .models import BillInfo, GoodsExpense
+from .models import BillInfo, GoodsBillInfo
 
 class FoodBillInfoForm(forms.ModelForm):
     class Meta:
@@ -14,9 +14,12 @@ class FoodBillForm(FoodBillInfoForm):
     class Meta(FoodBillInfoForm.Meta):
         fields = FoodBillInfoForm.Meta.fields + ('price',)
 
-class GoodExpenseBillForm(forms.ModelForm):
+class GoodsBillForm(forms.ModelForm):
+    price = forms.FloatField(widget=forms.HiddenInput())
 
     class Meta:
-        fields = ('name', 'category', 'quantity', 'price',) 
-        model = GoodsExpense
+        fields = ('item', 'quantity', 'price',)
+        model = GoodsBillInfo
+
+
 
