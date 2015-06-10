@@ -14,7 +14,7 @@
        </div>
        </div>
        <div>
-       <form class="form-horizontal form-inline" action="#" method="post">
+       <form class="form-horizontal form-inline" action="{% url 'foodbill' %}" method="post">
             {% csrf_token %}
             {{formset.management_form }}
             <div class="bill_items">
@@ -26,7 +26,9 @@
                 name="form-{{ forloop.counter0 }}-srno" type="number" value="1" />
                 {{ form }}
                 <tr><th><label for="id_form-{{ forloop.counter0 }}-total">Total:</label></th><td>
-                <input id="id_form-{{ forloop.counter0 }}-total" class="total" name="form-{{ forloop.counter0 }}-total" step="any" type="number" />
+                <input id="id_form-{{ forloop.counter0 }}-total" class="total"
+                name="form-{{ forloop.counter0 }}-total" step="any"
+                type="number" value="0" />
                 </div>
                 {% endfor %}
             </div>

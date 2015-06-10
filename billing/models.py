@@ -15,6 +15,7 @@ class FoodItem(models.Model):
     image = models.ImageField(upload_to='profile_images', blank=True)
     slug = models.SlugField(unique=True)
     category = models.CharField(max_length=32, choices=FOOD_CATEGORIES)
+    times_ordered = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name
@@ -36,6 +37,9 @@ class Bill(models.Model):
     when = models.DateTimeField()    
     total = models.FloatField()
     table = models.CharField(max_length=10, choices=TABLES, blank=True)
+
+    def __str__(self):
+        return 'BillNo {}'.format(self.id)
 
 class BillInfo(models.Model):
     item = models.ForeignKey(FoodItem)

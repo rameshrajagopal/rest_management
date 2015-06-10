@@ -1,25 +1,23 @@
 $(document).ready(function() {
     var counter = 0;
+    var gtotal  = 0;
     $("#id_form-"+ counter + "-item").focus();
     $("#id_form-"+ counter + "-quantity").val(0);
-    $("#id_form-"+ counter + "-item").change(function() {
-       var item = $(this).val();
-       $.get("/billing/get_price/", {item: item}, function(data) {
-           $("#id_form-"+ counter + "-price").val(data);
-           var quantity = $("#id_form-"+ counter + "-quantity").val();
-           $("#id_form-"+ counter + "-total").prop("readonly", false);
-           $("#id_form-"+ counter + "-total").val(quantity * data); 
-           $("#id_form-"+ counter + "-total").prop("readonly", true);
-           $("#gtotal").val(quantity * data);
-       });
-    });
-    $("#id_form-"+ counter + "-quantity").change(function() {
-      var quantity = $(this).val();
-      var price    = $("#id_form-"+ counter + "-price").val();
-      $("#id_form-"+ counter + "-total").prop("readonly", false);
-      $("#id_form-"+ counter + "-total").val(quantity * price);
-      $("#id_form-"+ counter + "-total").prop("readonly", true);
-      $("#gtotal").val(quantity * price);
+    $(".bill_item").change(function() {
+        var item = $("#id_form-" + counter + "-item").val();
+        var quantity = $("#id_form-"+ counter + "-quantity").val();
+        if ((item != NaN) && (quantity > 0)) {
+            $.get("/billing/get_price/", {item: item}, function(data) {
+                $("#id_form-"+ counter + "-price").val(data);
+                $("#id_form-"+ counter + "-total").prop("readonly", false);
+                $("#id_form-"+ counter + "-total").val(quantity * data); 
+                $("#id_form-"+ counter + "-total").prop("readonly", true);
+                gtotal = gtotal + (quantity * data);
+                $("#gtotal").val(gtotal);
+            });
+        } else {
+          //  alert(item + " " + quantity);
+        }
     });
     $("#add_more").click(function() {
         var newElement = $("div.bill_items:last").clone(true);
@@ -33,7 +31,7 @@ $(document).ready(function() {
                  '-' + total + '-');
              var id = 'id_' + name;
              $(this).attr({'name': name, 'id':
-              id}).val('').removeAttr('checked');
+              id, 'value': 0}).val('').removeAttr('checked');
              });
         
         newElement.find('label').each(function() {
@@ -42,9 +40,10 @@ $(document).ready(function() {
                 (total-1) + '-','-' + total + '-');
             $(this).attr('for', newFor);
             });
-        total++;
         counter = total;
+        total++;
         $('#id_form-TOTAL_FORMS').val(total);
         $("div.bill_items:last").append(newElement);
+        $('#id_form-'+counter+'-srno').val(total);
      });
 });
