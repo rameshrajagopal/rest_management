@@ -14,8 +14,23 @@
        </div>
        </div>
        <div>
-       <form class="bill_form" action="#" method="post">
-            {{form.as_table}}
+       <form class="form-horizontal form-inline" action="#" method="post">
+            {% csrf_token %}
+            {{formset.management_form }}
+            <div class="bill_items">
+                {% for form in formset %}
+                <div class="bill_item" id="bill-{{ forloop.counter0 }}">
+                <tr><th> <label for="id_form-{{ forloop.counter0 }}-srno">Srno:</label>
+                </th><td>
+                <input class="serialnumber" id="id_form-{{forloop.counter0 }}-srno"
+                name="form-{{ forloop.counter0 }}-srno" type="number" value="1" />
+                {{ form }}
+                <tr><th><label for="id_form-{{ forloop.counter0 }}-total">Total:</label></th><td>
+                <input id="id_form-{{ forloop.counter0 }}-total" class="total" name="form-{{ forloop.counter0 }}-total" step="any" type="number" />
+                </div>
+                {% endfor %}
+            </div>
+            <input type="button" class="btn btn-info add-item" id="add_more" value="Add more">
         <hr>
         <strong>Grand Total : </strong> <input id="gtotal" type="text" name="gtotal" />
         <input class="btn btn-primary" type="submit" name="submit" value="Submit" />

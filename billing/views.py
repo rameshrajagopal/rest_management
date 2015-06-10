@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .forms import FoodBillForm
 from .models import FoodItem
 from django.http import HttpResponse
+from django.forms.formsets import formset_factory
 
 def index(request):
     context = {}
@@ -9,8 +10,15 @@ def index(request):
     return response
 
 def food_bill(request):
-    form = FoodBillForm()
-    context = {'form': form}
+    FoodBillFormSet = formset_factory(FoodBillForm, extra=1)
+    if request.method == 'POST':
+        formset = FoodBillFormSet(request.POST, request.FILES)
+        if formset.is_valid():
+            pass
+        print('post method')
+    else:
+        formset = FoodBillFormSet()
+    context = {'formset': formset}
     response = render(request, 'billing/foodbill.html', context)
     return response
 
