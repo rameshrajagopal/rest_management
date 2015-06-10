@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   {% load staticfiles %}
+  {% load billing_extras %}
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -49,8 +50,35 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
-                {% block side_block %}{% endblock %}
-
+        <div class="panel panel-primary">
+        <div class="panel-heading">
+           <h3 class="panel-title"> Top 5 Food Items </h3>
+        </div>
+        </div>
+        <div id="topitems">
+        {% block top_side_block %}
+        {% get_top_fooditem_list %}
+        {% endblock %}
+        </div>
+        <div class="panel-heading">
+           <h4 class="panel-title"> Last 7 days  </h4>
+        </div>
+        <div id="topitems">
+        {% get_oneweek_sales_info %}
+        </div>
+        <ul class="nav nav-list">
+           <li class="nav-header"><strong>Find</strong></li>
+           <form>
+           <label></label>
+           <li>
+           <input class="search-query span10" type="text" name="suggestion" value="" id="suggestion"/></li>
+           </form>
+        </ul>
+        <div id="fooditems">
+        </div>
+        {% block side_block %}
+        {% get_fooditem_list %}
+        {% endblock %}
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
            <div>

@@ -14,6 +14,7 @@ $(document).ready(function() {
                 $("#id_form-"+ counter + "-total").prop("readonly", true);
                 gtotal = gtotal + (quantity * data);
                 $("#gtotal").val(gtotal);
+                $("#add_more").focus();
             });
         } else {
           //  alert(item + " " + quantity);
@@ -44,6 +45,19 @@ $(document).ready(function() {
         total++;
         $('#id_form-TOTAL_FORMS').val(total);
         $("div.bill_items:last").append(newElement);
-        $('#id_form-'+counter+'-srno').val(total);
+        $('#id_form-'+ counter +'-srno').val(total);
+        $('#id_form-'+ counter +'-quantity').val(0);
+        $('#id_form-'+ counter +'-price').val(0);
+        $('#id_form-'+ counter +'-total').val(0);
+        $('#id_form-'+ counter +'-item').val(16);
+        $('#id_form-'+ counter +'-item').focus();
      });
+    $('#suggestion').keyup(function() {
+      var query;
+      query = $(this).val();
+      $.get('/billing/suggest_food/', {suggestion: query},
+                function(data) {
+                $('#fooditems').html(data)
+                });
+    });
 });

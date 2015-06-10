@@ -33,11 +33,12 @@ def food_bill(request):
             total = 0
             items = []
             for form in formset:
-                quantity = form.cleaned_data['quantity']
-                price = form.cleaned_data['price']
-                items.append([form.cleaned_data['item'],
+                if form.cleaned_data['quantity'] != 0:
+                    quantity = form.cleaned_data['quantity']
+                    price = form.cleaned_data['price']
+                    items.append([form.cleaned_data['item'],
                               quantity, price])
-                total += (quantity * price)
+                    total += (quantity * price)
             bill = create_foodbill(total)
             for item in items:
                 store_foodbill_info(bill, item)
@@ -73,3 +74,21 @@ def getprice_view(request):
     if request.method == "GET":
         price = FoodItemPrice.get_price(request.GET['item'])
     return HttpResponse(price)
+
+def get_fooditem_list(max_results=10, starts_with=''):
+    fooditem_list = []
+    if starts_with:
+        item_list = FoodItem.objects.filter(name__istartswith=starts_with)
+    if max_results > 0:
+        if len(item_list) > max_results:
+            item_list = item_list[:max_results]
+    return item_list
+
+def suggest_food_view(request):
+    item_list = []
+    starts_with = ''
+    if request.method == 'GET':
+        starts_with = request.GET['suggestion']
+    item_list = get_fooditem_list(max_results=10, starts_with=starts_with)
+    return render(request, 'billing/fooditem_list.html', {'fitem_list':
+                    item_list})

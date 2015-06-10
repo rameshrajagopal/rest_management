@@ -6,4 +6,5 @@ urlpatterns = patterns('',
         url(r'^foodbill/$', views.food_bill, name='foodbill'),
         url(r'^expensebill/$', views.expense_bill, name='expensebill'),
         url(r'^get_price/$', views.getprice_view, name='getprice'),
+        url(r'^suggest_food/$', views.suggest_food_view, name='suggestion'),
         )
