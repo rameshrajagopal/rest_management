@@ -59,13 +59,18 @@ class GoodsExpense(models.Model):
             ('non-veg', 'non-veg'),
             ('others', 'others'),
             ('misc', 'misc'),
+            ('dairy', 'dairy'),
             )
     name = models.CharField(max_length=128)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(max_length=128)
     image = models.ImageField(upload_to='profile_images', blank=True)
     category = models.CharField(max_length=32, choices=GOODS_CATEGORIES) 
-    quantity = models.FloatField()
+    quantity = models.FloatField(default=0)
+    price = models.FloatField(default=0)
     bill = models.ForeignKey(GoodsExpenseBill)
+
+    class Meta:
+        unique_together = ('bill', 'name')
 
     def __str__(self):
         return self.name
