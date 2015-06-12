@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from django.forms.formsets import formset_factory
 from django.utils import timezone
 from django.template.defaultfilters import slugify
+from billing.utils import get_todays_report, get_itemsinfo_bw_dates
 
 def index(request):
     context = {}
@@ -24,7 +25,7 @@ def create_goodsbill(total):
 
 def store_foodbill_info(bill, item):
     fitem_obj = FoodItem.objects.get(slug=slugify(item[0]))
-    fitem_obj.times_ordered += 1
+    fitem_obj.times_ordered += item[1]
     fitem_obj.save()
     print(bill)
     print(item[0], item[1], item[2])
@@ -126,3 +127,9 @@ def suggest_food_view(request):
     item_list = get_fooditem_list(max_results=10, starts_with=starts_with)
     return render(request, 'billing/fooditem_list.html', {'fitem_list':
                     item_list})
+
+def report_view(request):
+    fitems_info = get_todays_report(BillInfo)
+    goods_info = get_todays_report(GoodsBillInfo)
+    return render(request, 'billing/billing_report.html', {'fitems_info':
+            fitems_info, 'goods_info': goods_info})

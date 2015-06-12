@@ -1,3 +1,25 @@
+from django.utils import timezone
+
+def get_todays_report(cls):
+    today = timezone.now()
+    bills = cls.objects.filter(bill__when__day = today.day)
+    items_info = {}
+    for b in bills:
+        if b.item.name in items_info:
+            items_info[b.item.name] += 1
+        else:
+            items_info[b.item.name] = 1
+    return items_info
+
+def get_itemsinfo_bw_dates(cls, start_date, end_date):
+    bills = cls.objects.filter(bill__when__range=[start_date, end_date])
+    items_info = {}
+    for b in bills:
+        if b.item.name in items_info:
+            items_info[b.item.name] += 1
+        else:
+            items_info[b.item.name] = 1
+    return items_info
 
 class MinHeap(object):
     def __init__(self, n_items):

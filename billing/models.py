@@ -9,6 +9,8 @@ class FoodItem(models.Model):
             ('NON VEG TIFFIN', 'NON VEG TIFFIN'),
             ('DESSERTS', 'DESSERTS'),
             ('COOL DRINKS', 'COOL DRINKS'),
+            ('VEG', 'VEG'),
+            ('NON-VEG', 'NON-VEG'),
             )
     name = models.CharField(max_length=128, unique=True)
     price = models.FloatField()

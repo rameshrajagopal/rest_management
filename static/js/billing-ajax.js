@@ -21,8 +21,30 @@ $(document).ready(function() {
         }
     });
     $("#add_more").click(function() {
-        var newElement = $("div.bill_items:last").clone(true);
         var total = $('#id_form-TOTAL_FORMS').val();
+        var idx = 0;
+        var curItem = $('#id_form-'+ counter +'-item').val();
+        var curQuantity  = $('#id_form-' + counter + '-quantity').val();
+        for (idx = 0; idx < counter; ++idx) {
+            if ($('#id_form-' + idx + '-item').val() === curItem) {
+                prevQuantity = $('#id_form-' + idx + '-quantity').val();
+                curQuantity = parseInt(curQuantity, 10) + parseInt(prevQuantity, 10)
+                $('#id_form-' + idx + '-quantity').val(curQuantity);
+                price = $("#id_form-"+ idx + "-price").val();
+                $("#id_form-"+ idx + "-total").prop("readonly", false);
+                $("#id_form-"+ idx + "-total").val(curQuantity * price); 
+                $("#id_form-"+ idx + "-total").prop("readonly", true);
+                gtotal = gtotal + (curQuantity * price) - (prevQuantity * price);
+                $("#gtotal").val(gtotal);
+                $('#id_form-'+ counter +'-quantity').val(0);
+                $('#id_form-'+ counter +'-price').val(0);
+                $('#id_form-'+ counter +'-total').val(0);
+                $('#id_form-'+ counter +'-item').val(16);
+                $("#id_form-" + counter + "-item").focus();
+                return 0;
+            }
+        }
+        var newElement = $("div.bill_items:last").clone(true);
         newElement.find('div').each(function() {
             var id = 'bill-' + total;
             $(this).attr({'id':id}).val('').removeAttr('checked');
