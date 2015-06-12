@@ -12,6 +12,7 @@ def index(request):
     return response
 
 def create_foodbill(total):
+    print("Bill of ", total, timezone.now())
     bill = Bill(when=timezone.now(), total=total)
     bill.save()
     return bill

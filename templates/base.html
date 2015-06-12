@@ -39,6 +39,7 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Reports</a></li>
                 <li><a href="{% url 'foodbill' %}">FoodBill</a></li>
                 <li><a href="{% url 'expensebill' %}">ExpenseBill</a></li>
                 <li><a href="{% url 'index' %}">Home</a></li>
@@ -52,18 +53,32 @@
         <div class="col-sm-3 col-md-2 sidebar">
         <div class="panel panel-primary">
         <div class="panel-heading">
+           <h3 class="panel-title"> Today's </h3>
+        </div>
+        </div>
+        <div id="topitems">
+        {% get_todays_sales_report %}
+        </div>
+        <div class="panel panel-primary">
+        <div class="panel-heading">
            <h3 class="panel-title"> Top 5 Food Items </h3>
         </div>
         </div>
         <div id="topitems">
-        {% block top_side_block %}
         {% get_top_fooditem_list %}
-        {% endblock %}
+        </div>
+        <div class="panel panel-primary">
+        <div class="panel-heading">
+           <h3 class="panel-title"> Top 5 Expenses </h3>
+        </div>
+        </div>
+        <div id="topitems">
+        {% get_top_expense_list %}
         </div>
         <div class="panel-heading">
            <h4 class="panel-title"> Last 7 days  </h4>
         </div>
-        <div id="topitems">
+        <div id="salesinfo">
         {% get_oneweek_sales_info %}
         </div>
         <ul class="nav nav-list">

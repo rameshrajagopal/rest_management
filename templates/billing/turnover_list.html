@@ -1,10 +1,12 @@
 <ul class="nav nav-sidebar">
-{% if bills %}
-    <table id="turnover_list">
-    <tr><td>Date</td>    <td>Amount</td>
-    {% for key,value in bills %}
-    <tr><td> {{ key }} </td><td> {{ value }} </td>
+{% if bills_list %}
+    <table id="sales_info" class="table table-striped">
+    <thead> <tr><td>Date</td><td>Amount</td> </thead>
+    <tbody>
+    {% for key,value in bills_list.items %}
+    <tr><td> {{ key |date:"F j, Y" }} </td><td> {{ value }} </td>
     {% endfor %}
+    </tbody>
     </table>
 {% endif %}
 </ul>

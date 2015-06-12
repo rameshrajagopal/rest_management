@@ -1,0 +1,7 @@
+<ul class="nav nav-sidebar">
+{% if fitem_list %}
+    {% for key,value in fitem_list.items %}
+        <li> <a href="#"> {{ key }} ( {{ value }} )</a></li>
+    {% endfor %}
+{% endif %}
+</ul>
