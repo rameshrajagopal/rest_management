@@ -104,7 +104,7 @@ class MinHeap(object):
             if len(self.item_list) == self.max_items:
                 i = (self.max_items-1)//2
                 while i >= 0:
-                    self.heapify(i) 
+                    self.heapify(i)
                     i = i - 1
         elif entry[1] > self.item_list[0][1]:
             if item in self.heap_map:
@@ -116,7 +116,7 @@ class MinHeap(object):
                 self.item_list[0] = entry
                 self.heap_map[item] = 0
                 self.heapify(0)
-    
+
     def get(self):
          print(self.item_map)
          return self.item_list

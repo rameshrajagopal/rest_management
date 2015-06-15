@@ -33,5 +33,46 @@
          <li class="list-group-item"> <a href="{% url 'overall_expenses_report' %}">Overall</a></li>
         </ul>
         </div>
+    </div>
+    <div class="row placeholders">
+       <div class="col-xs-12 col-sm-6 placeholder">
+       <div class="panel panel-primary">
+       <div class="panel-heading">
+        <h3 class="panel-title"> Weeks' Sales </h3>
        </div>
+       </div>
+         <div class="sales-report">
+        {% if bills_list %}
+            <table id="sales_info" class="table table-striped">
+            <thead> <tr><td>Date</td><td>Amount</td> </tr></thead>
+            <tbody>
+            {% for key,value in bills_list.items %}
+            <tr><td> {{ key |date:"F j, Y" }} </td><td> {{ value }} </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+            </table>
+        {% endif %}
+        </div>
+        </div>
+        <div class="col-xs-12 col-sm-6 placeholder">
+        <div class="panel panel-primary">
+        <div class="panel-heading">
+        <h3 class="panel-title"> Week' Expenses </h3>
+        </div>
+        </div>
+         <div class="expenses-report">
+        {% if expense_list %}
+            <table id="expenses_info" class="table table-striped">
+            <thead> <tr><td>Amount</td> </tr></thead>
+            <tbody>
+            {% for key,value in expense_list.items %}
+            <tr> <td> {{ value }} </td> </tr>
+            {% endfor %}
+            </tbody>
+            </table>
+        {% endif %}
+        </div>
+        </div>
+    </div>
 {% endblock %}

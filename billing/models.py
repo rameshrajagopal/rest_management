@@ -32,11 +32,11 @@ class Bill(models.Model):
             ('2', 'TABLE 2'),
             ('3', 'TABLE 3'),
             ('4', 'TABLE 4'),
-            ('5', 'TABLE 5'), 
+            ('5', 'TABLE 5'),
             ('6', 'TABLE 6'),
             )
 
-    when = models.DateTimeField()    
+    when = models.DateTimeField()
     total = models.FloatField()
     table = models.CharField(max_length=10, choices=TABLES, blank=True)
 
@@ -62,7 +62,7 @@ class Goods(models.Model):
     name = models.CharField(max_length=128, unique=True)
     slug = models.SlugField(unique=True)
     image = models.ImageField(upload_to='profile_images', blank=True)
-    category = models.CharField(max_length=32, choices=GOODS_CATEGORIES) 
+    category = models.CharField(max_length=32, choices=GOODS_CATEGORIES)
     price = models.FloatField(default=0)
 
     def __str__(self):
@@ -73,7 +73,7 @@ class Goods(models.Model):
         super(Goods, self).save(*args, **kwargs)
 
 class GoodsBill(models.Model):
-    when = models.DateTimeField()    
+    when = models.DateTimeField()
     total = models.FloatField()
     merchant = models.CharField(max_length=128, blank=True)
 

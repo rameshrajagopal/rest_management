@@ -24,6 +24,24 @@
             <strong> There are no expenses </strong>
         {% endif %} 
         </div>
+         <div class="panel panel-primary">
+         <div class="panel-heading">
+          <h4 class="panel-title"> Total Expenses </h4>
+         </div>
+         </div>
+         <div class="expenses-report">
+        {% if bills_list %}
+            <table id="expenses_info" class="table table-striped">
+            <thead> <tr><td>Date</td><td>Amount</td> </thead>
+            <tbody>
+            {% for key,value in bills_list.items %}
+            <tr><td> {{ key |date:"F j, Y" }} </td><td> {{ value }} </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+            </table>
+        {% endif %}
+        </div>
        </div>
       </div>
 {% endblock %}

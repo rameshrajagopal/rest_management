@@ -19,7 +19,7 @@ def get_todays_sales_report():
     sales_total = 0
     for sale in bills:
         print(sale.id)
-        sales_total += sale.total 
+        sales_total += sale.total
     print(sales_total)
     expenses_total = 0
     for expense in expenses:
@@ -55,18 +55,37 @@ def get_top_expense_list():
         fitem_dict[item[0]] = item[1]
     return {'fitem_list': fitem_dict}
 
-@register.inclusion_tag('billing/turnover_list.html')
-def get_oneweek_sales_info(days=7):
-    start_date = timezone.now() - timezone.timedelta(days=8)
+def get_sales_info(days=7):
+    start_date = timezone.now() - timezone.timedelta(days=days)
     end_date = timezone.now()
     bills = Bill.objects.filter(when__range=[start_date, end_date])
     bills_list = []
-    for i in range(8):
+    for i in range(days):
         run_date = timezone.now() - timezone.timedelta(days=i)
         day_wise_bills = bills.filter(when__day=run_date.day)
-        total = 0 
+        total = 0
         for b in day_wise_bills:
             total += b.total
         bills_list.append((run_date, total))
-    return {'bills_list': OrderedDict(bills_list)}
-      
+    return OrderedDict(bills_list)
+
+def get_expenses_info(days=7):
+    start_date = timezone.now() - timezone.timedelta(days=days)
+    end_date = timezone.now()
+    bills = GoodsBill.objects.filter(when__range=[start_date, end_date])
+    bills_list = []
+    for i in range(days):
+        run_date = timezone.now() - timezone.timedelta(days=i)
+        day_wise_bills = bills.filter(when__day=run_date.day)
+        total = 0
+        for b in day_wise_bills:
+            total += b.total
+        bills_list.append((run_date, total))
+    return OrderedDict(bills_list)
+
+@register.inclusion_tag('billing/turnover_list.html')
+def get_oneweek_sales_info():
+    bills_list = get_sales_info(days=7)
+    return {'bills_list' : bills_list}
+
+
