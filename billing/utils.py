@@ -6,9 +6,9 @@ def get_todays_report(cls):
     items_info = {}
     for b in bills:
         if b.item.name in items_info:
-            items_info[b.item.name] += 1
+            items_info[b.item.name] = items_info[b.item.name] + b.quantity
         else:
-            items_info[b.item.name] = 1
+            items_info[b.item.name] = b.quantity
     return items_info
 
 def get_itemsinfo_bw_dates(cls, start_date, end_date):
@@ -16,9 +16,29 @@ def get_itemsinfo_bw_dates(cls, start_date, end_date):
     items_info = {}
     for b in bills:
         if b.item.name in items_info:
-            items_info[b.item.name] += 1
+            items_info[b.item.name] = items_info[b.item.name] + b.quantity
         else:
-            items_info[b.item.name] = 1
+            items_info[b.item.name] = b.quantity
+    return items_info
+
+def get_weeks_report(cls):
+    start_date = timezone.now() - timezone.timedelta(days=7)
+    end_date = timezone.now()
+    return get_itemsinfo_bw_dates(cls, start_date, end_date)
+
+def get_months_report(cls):
+    start_date = timezone.now() - timezone.timedelta(days=30)
+    end_date = timezone.now()
+    return get_itemsinfo_bw_dates(cls, start_date, end_date)
+
+def get_overall_report(cls):
+    bills = cls.objects.all()
+    items_info = {}
+    for b in bills:
+        if b.item.name in items_info:
+            items_info[b.item.name] = items_info[b.item.name] + b.quantity
+        else:
+            items_info[b.item.name] = b.quantity
     return items_info
 
 class MinHeap(object):

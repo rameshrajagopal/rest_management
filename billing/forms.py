@@ -17,7 +17,7 @@ class FoodBillForm(FoodBillInfoForm):
         fields = FoodBillInfoForm.Meta.fields + ('price',)
 
 class GoodsBillForm(forms.ModelForm):
-    price = forms.FloatField(widget=forms.HiddenInput())
+    price = forms.FloatField()
 
     class Meta:
         fields = ('item', 'quantity', 'price',)

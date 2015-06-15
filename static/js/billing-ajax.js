@@ -12,8 +12,6 @@ $(document).ready(function() {
                 $("#id_form-"+ counter + "-total").prop("readonly", false);
                 $("#id_form-"+ counter + "-total").val(quantity * data); 
                 $("#id_form-"+ counter + "-total").prop("readonly", true);
-                gtotal = gtotal + (quantity * data);
-                $("#gtotal").val(gtotal);
                 $("#add_more").focus();
             });
         } else {
@@ -25,12 +23,13 @@ $(document).ready(function() {
         var idx = 0;
         var curItem = $('#id_form-'+ counter +'-item').val();
         var curQuantity  = $('#id_form-' + counter + '-quantity').val();
+        var curTotal = $("#id_form-"+ counter + "-total").val();
         for (idx = 0; idx < counter; ++idx) {
             if ($('#id_form-' + idx + '-item').val() === curItem) {
                 prevQuantity = $('#id_form-' + idx + '-quantity').val();
                 curQuantity = parseInt(curQuantity, 10) + parseInt(prevQuantity, 10)
-                $('#id_form-' + idx + '-quantity').val(curQuantity);
                 price = $("#id_form-"+ idx + "-price").val();
+                $('#id_form-' + idx + '-quantity').val(curQuantity);
                 $("#id_form-"+ idx + "-total").prop("readonly", false);
                 $("#id_form-"+ idx + "-total").val(curQuantity * price); 
                 $("#id_form-"+ idx + "-total").prop("readonly", true);
@@ -44,6 +43,8 @@ $(document).ready(function() {
                 return 0;
             }
         }
+        gtotal = gtotal + parseInt(curTotal, 10);
+        $("#gtotal").val(gtotal);
         var newElement = $("div.bill_items:last").clone(true);
         newElement.find('div').each(function() {
             var id = 'bill-' + total;
@@ -86,18 +87,18 @@ $(document).ready(function() {
     var g_gtotal  = 0;
     $(".goods_item").change(function() {
         var item = $("#id_form-" + g_counter + "-item").val();
-        var quantity = $("#id_form-"+ g_counter + "-quantity").val();
-        var total = $("#id_form-"+ g_counter +"-total").val();
-        if ((item != NaN) && (quantity > 0) && (total > 0)) {
-                $('#id_form-'+ g_counter +'-price').val(parseInt(total, 10));
-                g_gtotal = g_gtotal + parseInt(total, 10);
-                $("#goods_gtotal").val(g_gtotal);
+        var curQuantity = $("#id_form-"+ g_counter + "-quantity").val();
+        var curPrice = $("#id_form-" + g_counter + "-price").val();
+        if ((item != NaN) && (curQuantity > 0) && (curPrice > 0)) {
+                $('#id_form-'+ g_counter +'-total').val(curQuantity * curPrice);
                 $("#goods_add_more").focus();
         } else {
           //  alert(item + " " + quantity);
         }
     });
     $("#goods_add_more").click(function() {
+        g_gtotal = g_gtotal + parseInt($('#id_form-' + g_counter + '-total').val(), 10);
+        $("#goods_gtotal").val(g_gtotal);
         var newElement = $("div.goods_items:last").clone(true);
         var total = $('#id_form-TOTAL_FORMS').val();
         newElement.find('div').each(function() {
@@ -128,4 +129,16 @@ $(document).ready(function() {
         $('#id_form-'+ g_counter +'-item').val(1);
         $('#id_form-'+ g_counter +'-item').focus();
      });
+    $("#bill-submit").click(function() {
+        var curTotal = $("#id_form-"+ counter + "-total").val();
+        gtotal = gtotal + parseInt(curTotal, 10);
+        $("#gtotal").val(gtotal);
+        alert("Bill Amount " + gtotal);
+    });
+    $("#exp-bill-submit").click(function() {
+        var curTotal = $("#id_form-"+ g_counter + "-total").val();
+        g_gtotal = g_gtotal + parseInt(curTotal, 10);
+        $("#gtotal").val(g_gtotal);
+        alert("Bill Amount " + g_gtotal);
+    });
 });

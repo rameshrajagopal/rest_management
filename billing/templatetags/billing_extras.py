@@ -13,8 +13,6 @@ def get_fooditem_list():
 @register.inclusion_tag('billing/sales_progress.html')
 def get_todays_sales_report():
     today = timezone.now()
-    print(timezone.tzinfo)
-    print(today.day)
     bills = Bill.objects.filter(when__day=today.day)
     expenses = GoodsBill.objects.filter(when__day=today.day)
     context_dict = {}
@@ -34,7 +32,7 @@ def get_top_fooditem_list():
     start_date = timezone.now() - timezone.timedelta(days=8)
     end_date = timezone.now()
     bills = BillInfo.objects.filter(bill__when__range=[start_date, end_date])
-    heap = MinHeap(7)
+    heap = MinHeap(10)
     for b in bills:
         heap.add(b.item.name, b.quantity)
     top_item_list = heap.get()
@@ -48,7 +46,7 @@ def get_top_expense_list():
     start_date = timezone.now() - timezone.timedelta(days=8)
     end_date = timezone.now()
     bills = GoodsBillInfo.objects.filter(bill__when__range=[start_date, end_date])
-    heap = MinHeap(7)
+    heap = MinHeap(10)
     for b in bills:
         heap.add(b.item.name, b.quantity)
     top_item_list = heap.get()

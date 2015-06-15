@@ -13,15 +13,12 @@
         <h3 class="panel-title"> FoodItems Sales </h3>
        </div>
        </div>
-        {% if fitems_info  %}
-            <ul class="list-group">
-            {% for key,value in fitems_info.items  %}
-            <li class="list-group-item"> <a href="#">{{ key }} ( {{ value }})</a></li>
-            {% endfor %}
-            </ul>
-        {% else %}
-            <strong> There are no food items present </strong>
-        {% endif %}
+       <ul class="list-group">
+         <li class="list-group-item"> <a href="{% url 'today_sales_report' %}">Todays</a></li>
+         <li class="list-group-item"> <a href="{% url 'week_sales_report' %}">Weeks</a></li>
+         <li class="list-group-item"> <a href="{% url 'month_sales_report' %}">Months</a></li>
+         <li class="list-group-item"> <a href="{% url 'overall_sales_report' %}">Overall</a></li>
+        </ul>
         </div>
         <div class="col-xs-12 col-sm-6 placeholder">
         <div class="panel panel-primary">
@@ -29,15 +26,12 @@
         <h3 class="panel-title"> Goods Expenses </h3>
         </div>
         </div>
-        {% if goods_info %}
-            <ul class="list-group">
-            {% for key,value in goods_info.items %}
-                <li class="list-group-item"> <a href=#">{{ key }} ( {{ value }}) </a> </li>
-            {% endfor %}
-            </ul>
-        {% else %}
-            <strong> There are no expenses </strong>
-        {% endif %} 
+       <ul class="list-group">
+         <li class="list-group-item"> <a href="{% url 'today_expenses_report' %}">Todays</a></li>
+         <li class="list-group-item"> <a href="{% url 'week_expenses_report' %}">Weeks</a></li>
+         <li class="list-group-item"> <a href="{% url 'month_expenses_report' %}">Months</a></li>
+         <li class="list-group-item"> <a href="{% url 'overall_expenses_report' %}">Overall</a></li>
+        </ul>
         </div>
        </div>
 {% endblock %}

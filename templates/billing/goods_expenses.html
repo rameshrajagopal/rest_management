@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %} {{ title }} {% endblock title %}
+{% block content %}
+    <div class="page-header">
+        <h1> {{ page_header }} </h1>
+    </div>
+    <div><p></strong>.</p></div>
+    <div class="row placeholders">
+        <div class="col-xs-12 col-sm-12 placeholder">
+        <div class="panel panel-primary">
+        <div class="panel-heading">
+        <h3 class="panel-title"> Goods Expenses </h3>
+        </div>
+        </div>
+        <div class="goods-expenses">
+        {% if goods_info %}
+            <ul class="list-group">
+            {% for key,value in goods_info.items %}
+                <li class="list-group-item"> <a href=#">{{ key }} ( {{ value }}) </a> </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <strong> There are no expenses </strong>
+        {% endif %} 
+        </div>
+       </div>
+      </div>
+{% endblock %}

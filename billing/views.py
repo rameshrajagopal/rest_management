@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.forms.formsets import formset_factory
 from django.utils import timezone
 from django.template.defaultfilters import slugify
-from billing.utils import get_todays_report, get_itemsinfo_bw_dates
+from billing.utils import get_todays_report, get_weeks_report, get_months_report, get_overall_report
 
 def index(request):
     context = {}
@@ -19,6 +19,7 @@ def create_foodbill(total):
     return bill
 
 def create_goodsbill(total):
+    print("creating goods bill of total: {}".format(total))
     bill = GoodsBill(when=timezone.now(), total=total)
     bill.save()
     return bill
@@ -32,8 +33,9 @@ def store_foodbill_info(bill, item):
     bill_info = BillInfo(item=fitem_obj, quantity=item[1], bill=bill) 
     bill_info.save()
 
-def store_goodsbill_info(bill, name, quantity):
+def store_goodsbill_info(bill, name, quantity, price):
     fitem_obj = Goods.objects.get(slug=slugify(name))
+    fitem_obj.price = price
     fitem_obj.save()
     bill_info = GoodsBillInfo(item=fitem_obj, quantity=quantity, bill=bill) 
     bill_info.save()
@@ -78,10 +80,11 @@ def expense_bill(request):
                     quantity = form.cleaned_data['quantity']
                     price = form.cleaned_data['price']
                     items.append([name, quantity, price])
-                    total += price
+                    total += (quantity * price)
             bill = create_goodsbill(total)
             for item in items:
-                store_goodsbill_info(bill, item[0], item[1])
+                print(item[0], item[1], item[2])
+                store_goodsbill_info(bill, item[0], item[1], item[2])
             formset = GoodsFormSet()
         else:
             print(formset.errors)
@@ -129,7 +132,44 @@ def suggest_food_view(request):
                     item_list})
 
 def report_view(request):
+    return render(request, 'billing/billing_report.html', {})
+
+def todays_sales_view(request):
     fitems_info = get_todays_report(BillInfo)
+    return render(request, 'billing/fooditem_sales.html', {'fitems_info':
+            fitems_info, 'page_header': "Today's sales", 'title':'Today'})
+
+def weeks_sales_view(request):
+    fitems_info = get_weeks_report(BillInfo)
+    return render(request, 'billing/fooditem_sales.html', {'fitems_info':
+            fitems_info, 'page_header' : "Week's sales", 'title' : 'Week'})
+
+def months_sales_view(request):
+    fitems_info = get_months_report(BillInfo)
+    return render(request, 'billing/fooditem_sales.html', {'fitems_info':
+            fitems_info, 'page_header' : "Month's sales", 'title': 'Month'})
+
+def overall_sales_view(request):
+    fitems_info = get_overall_report(BillInfo)
+    return render(request, 'billing/fooditem_sales.html', {'fitems_info':
+            fitems_info, 'page_header' : "Overall sales", 'title': 'Overall'})
+
+def todays_expenses_view(request):
     goods_info = get_todays_report(GoodsBillInfo)
-    return render(request, 'billing/billing_report.html', {'fitems_info':
-            fitems_info, 'goods_info': goods_info})
+    return render(request, 'billing/goods_expenses.html', {'goods_info':
+            goods_info, 'page_header': "Today's expenses", 'title':'Today'})
+
+def weeks_expenses_view(request):
+    goods_info = get_weeks_report(GoodsBillInfo)
+    return render(request, 'billing/goods_expenses.html', {'goods_info':
+            goods_info, 'page_header' : "Week's expenses", 'title' : 'Week'})
+
+def months_expenses_view(request):
+    goods_info = get_months_report(GoodsBillInfo)
+    return render(request, 'billing/goods_expenses.html', {'goods_info':
+            goods_info, 'page_header' : "Month's expenses", 'title': 'Month'})
+
+def overall_expenses_view(request):
+    goods_info = get_overall_report(GoodsBillInfo)
+    return render(request, 'billing/goods_expenses.html', {'goods_info':
+            goods_info, 'page_header' : "Overall expenses", 'title': 'Overall'})
