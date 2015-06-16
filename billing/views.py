@@ -133,63 +133,64 @@ def suggest_food_view(request):
                     item_list})
 
 def report_view(request):
-    bills_list = get_sales_info(days=7)
-    expense_list = get_expenses_info(days=7)
+    (bills_list, sale_total) = get_sales_info(days=7)
+    (expense_list, exp_total) = get_expenses_info(days=7)
     return render(request, 'billing/billing_report.html', {'bills_list':
-            bills_list, 'expense_list' : expense_list})
+            bills_list, 'expense_list' : expense_list, 'sale_total':
+            sale_total, 'exp_total' : exp_total})
 
 def todays_sales_view(request):
     fitems_info = get_todays_report(BillInfo)
-    bills_list = get_sales_info(days=1)
+    (bills_list, total) = get_sales_info(days=1)
     return render(request, 'billing/fooditem_sales.html', {'fitems_info':
             fitems_info, 'page_header': "Today's sales", 'title':'Today',
             'bills_list': bills_list})
 
 def weeks_sales_view(request):
     fitems_info = get_weeks_report(BillInfo)
-    bills_list = get_sales_info(days=7)
+    (bills_list, total) = get_sales_info(days=7)
     return render(request, 'billing/fooditem_sales.html', {'fitems_info':
             fitems_info, 'page_header' : "Week's sales", 'title' : 'Week',
             'bills_list': bills_list})
 
 def months_sales_view(request):
     fitems_info = get_months_report(BillInfo)
-    bills_list = get_sales_info(days=31)
+    (bills_list, total) = get_sales_info(days=31)
     return render(request, 'billing/fooditem_sales.html', {'fitems_info':
             fitems_info, 'page_header' : "Month's sales", 'title': 'Month',
             'bills_list' : bills_list})
 
 def overall_sales_view(request):
     fitems_info = get_overall_report(BillInfo)
-    bills_list = get_sales_info(days=356)
+    (bills_list, total) = get_sales_info(days=356)
     return render(request, 'billing/fooditem_sales.html', {'fitems_info':
             fitems_info, 'page_header' : "Overall sales", 'title': 'Overall',
             'bills_list' : bills_list})
 
 def todays_expenses_view(request):
     goods_info = get_todays_report(GoodsBillInfo)
-    bills_list = get_expenses_info(days=1)
+    (bills_list, total) = get_expenses_info(days=1)
     return render(request, 'billing/goods_expenses.html', {'goods_info':
             goods_info, 'page_header': "Today's expenses", 'title':'Today',
             'bills_list' : bills_list})
 
 def weeks_expenses_view(request):
     goods_info = get_weeks_report(GoodsBillInfo)
-    bills_list = get_expenses_info(days=7)
+    (bills_list, total) = get_expenses_info(days=7)
     return render(request, 'billing/goods_expenses.html', {'goods_info':
             goods_info, 'page_header' : "Week's expenses", 'title' : 'Week',
             'bills_list' : bills_list})
 
 def months_expenses_view(request):
     goods_info = get_months_report(GoodsBillInfo)
-    bills_list = get_expenses_info(days=31)
+    (bills_list, total) = get_expenses_info(days=31)
     return render(request, 'billing/goods_expenses.html', {'goods_info':
             goods_info, 'page_header' : "Month's expenses", 'title': 'Month',
             'bills_list' : bills_list})
 
 def overall_expenses_view(request):
     goods_info = get_overall_report(GoodsBillInfo)
-    bills_list = get_expenses_info(days=356)
+    (bills_list, total) = get_expenses_info(days=356)
     return render(request, 'billing/goods_expenses.html', {'goods_info':
             goods_info, 'page_header' : "Overall expenses", 'title': 'Overall',
             'bills_list' : bills_list})

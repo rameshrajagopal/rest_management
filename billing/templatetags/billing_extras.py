@@ -60,32 +60,36 @@ def get_sales_info(days=7):
     end_date = timezone.now()
     bills = Bill.objects.filter(when__range=[start_date, end_date])
     bills_list = []
+    grand_total = 0
     for i in range(days):
         run_date = timezone.now() - timezone.timedelta(days=i)
         day_wise_bills = bills.filter(when__day=run_date.day)
         total = 0
         for b in day_wise_bills:
             total += b.total
+        grand_total += total
         bills_list.append((run_date, total))
-    return OrderedDict(bills_list)
+    return (OrderedDict(bills_list), grand_total)
 
 def get_expenses_info(days=7):
     start_date = timezone.now() - timezone.timedelta(days=days)
     end_date = timezone.now()
     bills = GoodsBill.objects.filter(when__range=[start_date, end_date])
     bills_list = []
+    grand_total = 0
     for i in range(days):
         run_date = timezone.now() - timezone.timedelta(days=i)
         day_wise_bills = bills.filter(when__day=run_date.day)
         total = 0
         for b in day_wise_bills:
             total += b.total
+        grand_total += total
         bills_list.append((run_date, total))
-    return OrderedDict(bills_list)
+    return (OrderedDict(bills_list), grand_total)
 
 @register.inclusion_tag('billing/turnover_list.html')
 def get_oneweek_sales_info():
-    bills_list = get_sales_info(days=7)
+    (bills_list, g_total) = get_sales_info(days=7)
     return {'bills_list' : bills_list}
 
 
